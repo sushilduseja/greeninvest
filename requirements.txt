@@ -1,0 +1,12 @@
+setuptools
+wheel
+nltk
+numpy
+pandas
+streamlit
+yfinance
+scikit-learn
+plotly
+matplotlib
+beautifulsoup4
+requests
