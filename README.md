@@ -25,7 +25,7 @@ pip install -r requirements.txt
 
 2. Run the application:
 ```bash
-streamlit run main.py
+streamlit run src/main.py
 ```
 
 3. Access the dashboard at http://localhost:8501

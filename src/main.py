@@ -3,9 +3,9 @@ import yfinance as yf
 import plotly.express as px
 import pandas as pd
 
-from data_collection import get_company_data
-from esg_analysis import analyze_esg
-from report_generator import generate_report
+from data.data_collection import get_company_data
+from analysis.esg_analysis import analyze_esg
+from utils.report_generator import generate_report
 
 # Set page configuration
 st.set_page_config(page_title="GreenInvest ESG Analyzer", layout="wide")
