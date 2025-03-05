@@ -15,6 +15,10 @@ st.title("GreenInvest: AI-Powered ESG Portfolio Analysis Tool")
 # Sidebar: Input company ticker
 ticker = st.sidebar.text_input("Enter Company Ticker", "AAPL")
 
+# Initialize session state for ESG score if it doesn't exist
+if 'current_esg_score' not in st.session_state:
+    st.session_state.current_esg_score = None
+
 # Data Collection: Retrieve and display company data
 company_data = get_company_data(ticker)
 st.header(f"{ticker} - Company Financial Data")
@@ -31,10 +35,8 @@ if st.button("Run ESG Analysis"):
     st.write(f"Calculated ESG Score: **{esg_score:.2f}**")
     st.write("Sentiment Analysis Detail:", sentiment_result)
     
-    # Save ESG score for report generation
-    current_esg_score = esg_score
-else:
-    current_esg_score = None
+    # Save ESG score in session state
+    st.session_state.current_esg_score = esg_score
 
 # Portfolio Visualization Section
 st.header("Stock Price Visualization")
@@ -62,8 +64,11 @@ st.write(f"Benchmark ESG Score: **{benchmark_esg}**")
 # Report Generation Section
 st.header("Generate Analysis Report")
 if st.button("Generate Report"):
-    if current_esg_score is None:
+    if st.session_state.current_esg_score is None:
         st.error("Please run the ESG analysis first.")
     else:
-        report_text = generate_report(ticker, company_data, current_esg_score, benchmark_esg)
-        st.download_button("Download Report", report_text, file_name="esg_report.txt")
+        report_text = generate_report(ticker, company_data, 
+                                    st.session_state.current_esg_score, 
+                                    benchmark_esg)
+        st.download_button("Download Report", report_text, 
+                          file_name="esg_report.txt")
