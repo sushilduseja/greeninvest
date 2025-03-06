@@ -20,9 +20,72 @@ if 'current_esg_score' not in st.session_state:
     st.session_state.current_esg_score = None
 
 # Data Collection: Retrieve and display company data
-company_data = get_company_data(ticker)
-st.header(f"{ticker} - Company Financial Data")
-st.dataframe(company_data)
+raw_metrics, formatted_metrics = get_company_data(ticker)
+st.header(f"{ticker} - Financial Overview")
+
+# Create three columns for key metrics
+col1, col2, col3 = st.columns(3)
+
+# Market performance metrics
+with col1:
+    st.subheader("Market Performance")
+    st.metric(
+        label="Market Cap",
+        value=formatted_metrics.get('Market Cap', 'N/A'),
+        delta=None
+    )
+    st.metric(
+        label="P/E Ratio",
+        value=formatted_metrics.get('P/E Ratio', 'N/A'),
+        delta=None
+    )
+    st.metric(
+        label="Revenue Growth",
+        value=formatted_metrics.get('Revenue Growth', 'N/A'),
+        delta=formatted_metrics.get('Revenue Growth', 'N/A'),
+        delta_color="normal"
+    )
+
+# Profitability metrics
+with col2:
+    st.subheader("Profitability")
+    st.metric(
+        label="Profit Margin",
+        value=formatted_metrics.get('Profit Margin', 'N/A'),
+        delta=None
+    )
+    st.metric(
+        label="Operating Margin",
+        value=formatted_metrics.get('Operating Margin', 'N/A'),
+        delta=None
+    )
+    st.metric(
+        label="Return on Equity",
+        value=formatted_metrics.get('Return on Equity', 'N/A'),
+        delta=None
+    )
+
+# Financial health metrics
+with col3:
+    st.subheader("Financial Health")
+    st.metric(
+        label="Total Revenue",
+        value=formatted_metrics.get('Total Revenue', 'N/A'),
+        delta=None
+    )
+    st.metric(
+        label="Debt to Equity",
+        value=formatted_metrics.get('Debt to Equity', 'N/A'),
+        delta=None
+    )
+    st.metric(
+        label="Current Ratio",
+        value=formatted_metrics.get('Current Ratio', 'N/A'),
+        delta=None
+    )
+
+# Add a divider
+st.markdown("---")
 
 # ESG Analysis Section
 st.header("ESG Analysis from Corporate Report")
@@ -67,7 +130,7 @@ if st.button("Generate Report"):
     if st.session_state.current_esg_score is None:
         st.error("Please run the ESG analysis first.")
     else:
-        report_text = generate_report(ticker, company_data, 
+        report_text = generate_report(ticker, raw_metrics, formatted_metrics,
                                     st.session_state.current_esg_score, 
                                     benchmark_esg)
         st.download_button("Download Report", report_text, 
